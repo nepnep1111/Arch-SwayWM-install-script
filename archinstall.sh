@@ -97,6 +97,7 @@ archextra=""
 archdesktop=""
 archx240=""
 archgpdwinmax=""
+chaoticaurkeymirror="chaotic-keyring chaotic-mirrorlist"
 
 #MAIN MENU
 echo "
@@ -245,7 +246,7 @@ case $select in
       #Arch-chroot/postinstall MENU
       echo "
       ${yellow}Arch-chroot/postinstall MENU${AO}
-      1. #
+      1. Add Chaotic Aur
       2. #
       3. #
       4. #
@@ -254,10 +255,16 @@ case $select in
       99. Shutdown"
       read postinstall
       case $postinstall in
-        1)#
-       #
+        1)#Add chaotic aur
+		echo "installing mirrorlist and keyring"
+		yay -S $chaoticaurkeymirror
+		echo "adding to /etc/pacman.d"
+		echo "[chaotic-aur]" >> /etc/pacman.d
+		echo "Include = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.d
+		echo "running pacman -Syu"
+		pacman -Syu
         ;;
-        2)#
+        2)#Install Swaywm/waybar-git
         #
         ;;
         3)#
