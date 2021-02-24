@@ -91,12 +91,12 @@ oldname="test"
 newname="testme"
 
 #archpackages
-archbase="base linux linux-firmware nano man-db man-pages texinfo f2fs-tools btrfs-progs"
-archsway=""
+archbase="base linux linux-firmware nano man-db man-pages texinfo f2fs-tools btrfs-progs sudo yay"
+archswaygit=""
 archextra=""
 archdesktop=""
-archx240=""
-archgpdwinmax=""
+archx240="tlp"
+archgpdwinmax="tlp"
 chaoticaurkeymirror="chaotic-keyring chaotic-mirrorlist"
 
 #MAIN MENU
@@ -178,7 +178,7 @@ case $select in
       2. Format NVME SSD for F2FS
       3. Format SATA BOOTorESP partition
       4. Format NVME BootorESP parition
-      5. #
+      5. Create SwapFile
       88. Return to main menu
       99. Shutdown"
       read formatpartitions
@@ -200,8 +200,13 @@ case $select in
         4)#
         #
         ;;
-        5)#
-        #
+        5)#Create swapfile
+        echo "creating swapfile
+        How many MB should the swapfile be? ex: 16386 for 16GB"
+        read $swapsize
+        dd if=/dev/zero of=/mnt/swapfile bs=1M count=$swapsize
+        chmod 600 /mnt/swapfile
+        swapon /mnt/swapfile
         ;;
         88)#Return to main menu
         ./archinstall.sh
@@ -218,21 +223,25 @@ case $select in
       #Install Arch Menu
       echo "
       ${yellow}Install Arch Menu${AO}
-      1. #
-      2. #
-      3. #
+      1. Install arch base
+      2. genfstab
+      3. Chroot to arch install
       88. Return to Main Menu
       99. Shutdown"
       read installarch
       case $installarch in
-        1)#
+        1)#Install arch base
         #
         ;;
-        2)#
-        #
+        2)#genfstab
+        echo "generating fstab"
+        genfstab -U /mnt >> /mnt/etc/fstab
+        sudo pacman -S nano
+        nano /mnt/etc/fstab
         ;;
-        3)#
-        #
+        3)#Chroot
+        echo "chrooting into arch install"
+        arch-chroot /mnt
         ;;
         88)#return to main MENU
         ./archinstall.sh;;
@@ -247,10 +256,18 @@ case $select in
       echo "
       ${yellow}Arch-chroot/postinstall MENU${AO}
       1. Add Chaotic Aur
-      2. #
-      3. #
-      4. #
-      5. #
+      2. Install swaywm-git and waybar-git (needs choatic aur)
+      3. Edit and gen locale
+      4. Set hostname
+      5. mkinitcpio
+      6. Set root password
+      7. install grub
+      8. install refind
+      9. install systemdboot
+      10. install intel microcode
+      11. install amd microcode
+      12. edit pacman.conf
+      13. create user
       88. Return to Main Menu
       99. Shutdown"
       read postinstall
@@ -267,15 +284,40 @@ case $select in
         2)#Install Swaywm/waybar-git
         #
         ;;
-        3)#
-        #
+        3)#Edit and gen locale
+        nano /etc/locale.conf
+        nano /etc/vconsole.conf
         ;;
-        4)#
-        #
+        4)#Set hostname
+        nano /etc/hostname
         ;;
-        5)#
-        #
+        5)#mkinitcpio
+        mkinitcpio -P
         ;;
+        6)#set root password
+        passwd
+        ;;
+        7)#install grub
+        ;;
+        8)#install refind
+        ;;
+        9)#install systemdboot
+        ;;
+        10)#install intel microcode
+        pacman -S intel-ucode
+        ;;
+        11)#install amd microcode
+        pacman -S amd-ucode
+        ;;
+        12)#edit pacmanconf
+        nano /etc/pacman.conf
+        ;;
+        13)#useradd
+        echo username?
+        read username
+        useradd -m -G wheel $username
+        echo "running passwd to set password"
+        passwd $username
         88)#return to main menu
         ./archinstall.sh;;
         99)#Shutdown
