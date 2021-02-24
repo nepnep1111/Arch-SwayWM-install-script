@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 #---------------------------------------------btrfs install w.i.p
 #mount root btrfs partition
@@ -109,12 +109,12 @@ ${green}Main Menu${AO}
 5. #
 88. Exit
 99. Shut Down"
-read select
+read -r select
 case $select in
-
-  1)
-    #Partition Drive MENU
-    echo -e "
+    
+    1)
+        #Partition Drive MENU
+        echo -e "
     ${yellow}Partition Drive${AO}
     1. #
     2. #
@@ -127,52 +127,52 @@ case $select in
     9. #
     10. #
     88. Return to Main Menu
-    99. Shutdown"
-    read PartitionDrive
-    case $PartitionDrive in
-
-      1) #
-        #
-        ;;
-      2) #
-        #
-        ;;
-      3) #
-        #
-        ;;
-      4) #
-        #
-        ;;
-      5) #
-        #
-        ;;
-      6) #
-        #
-        ;;
-      7) #
-        #
-      ;;
-      8) #
-        #
-      ;;
-      9) #
-        #
-      ;;
-      10) #
-        #
-      ;;
-      88) #return to main MENU
-      ./archinstall.sh
-      ;;
-      99) #Shutdown
-      poweroff
-      ;;
-    esac
-;;
-  2)
-
-      #Format Partitions MENU
-      echo "
+        99. Shutdown"
+        read -r PartitionDrive
+        case $PartitionDrive in
+            
+            1) #
+                #
+            ;;
+            2) #
+                #
+            ;;
+            3) #
+                #
+            ;;
+            4) #
+                #
+            ;;
+            5) #
+                #
+            ;;
+            6) #
+                #
+            ;;
+            7) #
+                #
+            ;;
+            8) #
+                #
+            ;;
+            9) #
+                #
+            ;;
+            10) #
+                #
+            ;;
+            88) #return to main MENU
+                ./archinstall.sh
+            ;;
+            99) #Shutdown
+                poweroff
+            ;;
+        esac
+    ;;
+    2)
+        
+        #Format Partitions MENU
+        echo "
       ${yellow}Format Partitions${AO}
       1. Format SATA SSD for F2FS
       2. Format NVME SSD for F2FS
@@ -180,80 +180,80 @@ case $select in
       4. Format NVME BootorESP parition
       5. Create SwapFile
       88. Return to main menu
-      99. Shutdown"
-      read formatpartitions
-      case $formatpartitions in
-
-        1)#Format SATA SSD for F2FS
-		echo "checking if f2fs-tools are installed"
-        pacman -S f2fs-tools
-		echo "what drive letter and partition? EX: /dev/sda2"
-		read f2fspartionformat
-		mkfs.f2fs -f -l root -O extra_attr,inode_checksum,sb_checksum,compression $f2fspartionformat
-        ;;
-        2)# #
-        #
-        ;;
-        3)##
-        #
-        ;;
-        4)#
-        #
-        ;;
-        5)#Create swapfile
-        echo "creating swapfile
-        How many MB should the swapfile be? ex: 16386 for 16GB"
-        read $swapsize
-        dd if=/dev/zero of=/mnt/swapfile bs=1M count=$swapsize
-        chmod 600 /mnt/swapfile
-        swapon /mnt/swapfile
-        ;;
-        88)#Return to main menu
-        ./archinstall.sh
-        ;;
-        99)
-        poweroff
-        ;;
-      esac
-
-
-;;
-  3)
-
-      #Install Arch Menu
-      echo "
+        99. Shutdown"
+        read -r formatpartitions
+        case $formatpartitions in
+            
+            1) #Format SATA SSD for F2FS
+                echo "checking if f2fs-tools are installed"
+                pacman -S f2fs-tools
+                echo "what drive letter and partition? EX: /dev/sda2"
+                read -r f2fspartionformat
+                mkfs.f2fs -f -l root -O extra_attr,inode_checksum,sb_checksum,compression $f2fspartionformat
+            ;;
+            2) # #
+                #
+            ;;
+            3) ##
+                #
+            ;;
+            4) #
+                #
+            ;;
+            5) #Create swapfile
+                echo "creating swapfile
+                How many MB should the swapfile be? ex: 16386 for 16GB"
+                read -r swapsize
+                dd if=/dev/zero of=/mnt/swapfile bs=1M count=$swapsize
+                chmod 600 /mnt/swapfile
+                swapon /mnt/swapfile
+            ;;
+            88) #Return to main menu
+                ./archinstall.sh
+            ;;
+            99)
+                poweroff
+            ;;
+        esac
+        
+        
+    ;;
+    3)
+        
+        #Install Arch Menu
+        echo "
       ${yellow}Install Arch Menu${AO}
       1. Install arch base
       2. genfstab
       3. Chroot to arch install
       88. Return to Main Menu
-      99. Shutdown"
-      read installarch
-      case $installarch in
-        1)#Install arch base
-        #
-        ;;
-        2)#genfstab
-        echo "generating fstab"
-        genfstab -U /mnt >> /mnt/etc/fstab
-        sudo pacman -S nano
-        nano /mnt/etc/fstab
-        ;;
-        3)#Chroot
-        echo "chrooting into arch install"
-        arch-chroot /mnt
-        ;;
-        88)#return to main MENU
-        ./archinstall.sh;;
-        99)
-        poweroff;;
-      esac
-
-;;
-  4)
-
-      #Arch-chroot/postinstall MENU
-      echo "
+        99. Shutdown"
+        read -r installarch
+        case $installarch in
+            1)#Install arch base
+                #
+            ;;
+            2) #genfstab
+                echo "generating fstab"
+                genfstab -U /mnt >> /mnt/etc/fstab
+                sudo pacman -S nano
+                nano /mnt/etc/fstab
+            ;;
+            3) #Chroot
+                echo "chrooting into arch install"
+                arch-chroot /mnt
+            ;;
+            88) #return to main MENU
+            ./archinstall.sh;;
+            99)
+            poweroff;;
+        esac
+        
+    ;;
+    4)
+        
+        #Arch-chroot/postinstall MENU
+        echo "
       ${yellow}Arch-chroot/postinstall MENU${AO}
       1. Add Chaotic Aur
       2. Install swaywm-git and waybar-git (needs choatic aur)
@@ -269,89 +269,90 @@ case $select in
       12. edit pacman.conf
       13. create user
       88. Return to Main Menu
-      99. Shutdown"
-      read postinstall
-      case $postinstall in
-        1)#Add chaotic aur
-		echo "installing mirrorlist and keyring"
-		yay -S $chaoticaurkeymirror
-		echo "adding to /etc/pacman.d"
-		echo "[chaotic-aur]" >> /etc/pacman.d
-		echo "Include = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.d
-		echo "running pacman -Syu"
-		pacman -Syu
-        ;;
-        2)#Install Swaywm/waybar-git
+        99. Shutdown"
+        read postinstall
+        case $postinstall in
+            1) #Add chaotic aur
+                echo "installing mirrorlist and keyring"
+                yay -S $chaoticaurkeymirror
+                echo "adding to /etc/pacman.d"
+                echo "[chaotic-aur]" >> /etc/pacman.d
+                echo "Include = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.d
+                echo "running pacman -Syu"
+                pacman -Syu
+            ;;
+            2) #Install Swaywm/waybar-git
+                #
+            ;;
+            3) #Edit and gen locale
+                nano /etc/locale.conf
+                nano /etc/vconsole.conf
+            ;;
+            4) #Set hostname
+                nano /etc/hostname
+            ;;
+            5) #mkinitcpio
+                mkinitcpio -P
+            ;;
+            6) #set root password
+                passwd
+            ;;
+            7) #install grub
+            ;;
+            8) #install refind
+            ;;
+            9) #install systemdboot
+            ;;
+            10) #install intel microcode
+                pacman -S intel-ucode
+            ;;
+            11) #install amd microcode
+                pacman -S amd-ucode
+            ;;
+            12)#edit pacmanconf
+                nano /etc/pacman.conf
+            ;;
+            13) #useradd
+                echo "username?"
+                read username
+                useradd -m -G wheel $username
+                echo "running passwd to set password"
+                passwd $username
+            ;;
+            88) #return to main menu
+            ./archinstall.sh;;
+            99)#Shutdown
+            poweroff;;
+        esac
+        
+    ;;
+    5)
+        
         #
-        ;;
-        3)#Edit and gen locale
-        nano /etc/locale.conf
-        nano /etc/vconsole.conf
-        ;;
-        4)#Set hostname
-        nano /etc/hostname
-        ;;
-        5)#mkinitcpio
-        mkinitcpio -P
-        ;;
-        6)#set root password
-        passwd
-        ;;
-        7)#install grub
-        ;;
-        8)#install refind
-        ;;
-        9)#install systemdboot
-        ;;
-        10)#install intel microcode
-        pacman -S intel-ucode
-        ;;
-        11)#install amd microcode
-        pacman -S amd-ucode
-        ;;
-        12)#edit pacmanconf
-        nano /etc/pacman.conf
-        ;;
-        13)#useradd
-        echo username?
-        read username
-        useradd -m -G wheel $username
-        echo "running passwd to set password"
-        passwd $username
-        88)#return to main menu
-        ./archinstall.sh;;
-        99)#Shutdown
-        poweroff;;
-      esac
-
-;;
-  5)
-
-      #
-	  echo "
+        echo "
       ${yellow}#${AO}
       1. #
-      "
-      read placeholder
-      case $placeholder in
-        1)
-        ;;
-        2)
-        ;;
-        3)
-        ;;
-        88)
-        ./archinstall.sh;;
-        99)
-        poweroff;;
-      esac
-
-
-;;
-  88)
-Exit
-;;
-  99)
-poweroff
-;;
+        "
+        read -r placeholder
+        case $placeholder in
+            1)
+            ;;
+            2)
+            ;;
+            3)
+            ;;
+            88)
+            ./archinstall.sh;;
+            99)
+            poweroff;;
+        esac
+        
+        
+    ;;
+    88)
+        Exit
+    ;;
+    99)
+        poweroff
+    ;;
 esac
